@@ -4,15 +4,19 @@ import BlogList from "./BlogList";
 export default function Home() {
 
     const [blogs, setBlogs] = useState([
-        {title: "My Name Is", body: 'Samuel is cool', author: 'Tafadzwa', id: 1},
+        {title: "My Name Is", body: 'Samuel is cool', author: 'Samuel', id: 1},
         {title: "Her Name Is", body: 'Tanatswa is cool', author: 'Tanatswa', id: 2},
         {title: "His Name Is", body: 'Tafadzwa is cool', author: 'Tafadzwa', id: 3}
     ])
+
+    const handleDelete = (id) =>{
+        const newBlogs = blogs.filter(blog => blog.id !== id);
+        setBlogs(newBlogs);
+    }
     
   return (
     <div className="home">
-        <BlogList blogs={blogs} title="All Blogs"/>
-        <BlogList blogs={blogs.filter((blog) => blog.author === 'Tafadzwa')} title="Tafadzwa's Blogs"/>
+        <BlogList blogs={blogs} title="All Blogs" handleDelete={handleDelete}/>
     </div>
   )
 }
