@@ -3,27 +3,31 @@ import BlogList from "./BlogList";
 
 export default function Home() {
 
-    const [blogs, setBlogs] = useState([
-        {title: "My Name Is", body: 'Samuel is cool', author: 'Samuel', id: 1},
-        {title: "Her Name Is", body: 'Tanatswa is cool', author: 'Tanatswa', id: 2},
-        {title: "His Name Is", body: 'Tafadzwa is cool', author: 'Tafadzwa', id: 3}
-    ])
-    const [name, setName] = useState('Samuel');
-
-    const handleDelete = (id) =>{
-        const newBlogs = blogs.filter(blog => blog.id !== id);
-        setBlogs(newBlogs);
-    }
+    const [blogs, setBlogs] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(()=>{
-        console.log('Name: '+name)
-    }, [name])
+        fetch('http://localhost:8000/blogs').then(res =>{
+            if(!res.ok){
+                throw new Error('could not fetch data for that resource');
+            }
+            return res.json();
+        }).then((data) => {
+            setBlogs(data);
+            setIsLoading(false);
+            setError(null);
+        }).catch(err => {
+            setError(err.message);
+            setIsLoading(false)
+        })
+    }, [])
     
   return (
     <div className="home">
-        <BlogList blogs={blogs} title="All Blogs" handleDelete={handleDelete}/>
-        <button onClick={()=>setName('Tanatswa')}>change name</button>
-        <p>{name}</p>
+        {isLoading && <div>Loading...</div>}
+        {error && <div>{ error }</div>}
+        {blogs && <BlogList blogs={blogs} title="All Blogs"/>}
     </div>
   )
 }
