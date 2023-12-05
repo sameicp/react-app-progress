@@ -1,9 +1,11 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Create() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [author, setAuthor] = useState('samuel');
+  const navigate = useNavigate();
 
   const handleSubmit = (e)=>{
     e.preventDefault();
@@ -14,7 +16,8 @@ export default function Create() {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(blog)
     }).then(()=>{
-      console.log("new blog added")
+      console.log("new blog added");
+      navigate('/');
     })
   }
 
